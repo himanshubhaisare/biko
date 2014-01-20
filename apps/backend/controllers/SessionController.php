@@ -35,8 +35,8 @@ class SessionController extends ControllerBase
                     return $this->flash->error('Incorrect User/Password');
                 }
 
-                //return $this->dispatcher->forward(array('controller' => 'dashboard'));
-                return $this->response->redirect('admin/dashboard');
+                return $this->dispatcher->forward(array('controller' => 'dashboard'));
+                //return $this->response->redirect('admin/dashboard');
     		}
 
     	}
