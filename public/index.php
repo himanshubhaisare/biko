@@ -8,7 +8,7 @@
 
 use Phalcon\Mvc\Application;
 
-if (!$_GET['_url']) {
+if (empty($_GET['_url'])) {
 	$_GET['_url'] = '/index';
 }
 
