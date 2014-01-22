@@ -46,7 +46,11 @@ class AnnotationsInitializer extends MvcPlugin
 					 */
 					case 'HasMany':
 						$arguments = $annotation->getArguments();
-						$manager->addHasMany($model, $arguments[0], $arguments[1], $arguments[2]);
+						if (isset($arguments[3])) {
+							$manager->addHasMany($model, $arguments[0], $arguments[1], $arguments[2], $arguments[3]);
+						} else {
+							$manager->addHasMany($model, $arguments[0], $arguments[1], $arguments[2]);
+						}
 						break;
 
 					/**

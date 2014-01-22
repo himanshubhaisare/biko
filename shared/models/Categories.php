@@ -4,6 +4,7 @@ namespace Biko\Models;
 
 /**
  * @Source("biko_categories")
+ * @HasMany("id", "Biko\Models\Products", "categoriesId", {"alias": "products"})
  */
 class Categories extends ModelBase
 {

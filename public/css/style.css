@@ -23,9 +23,10 @@ footer {
 	color: #c0c0c0;
 	font-size: 11px;
 	padding: 5px;
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	width: 100%;
+	z-index: 40000;
 }
 
 footer a {
@@ -81,4 +82,20 @@ footer a {
 
 .jumbottom h1 {
 	color: #20E6C0;
+}
+
+.product-title {
+	color: #0066c0;
+}
+
+.product {
+	margin-bottom: 15px;
+	border-bottom: 1px solid #dadada;
+	padding-bottom: 10px;
+}
+
+.product-price {
+	color: #b12704;
+	font-size: 21px;
+	padding-bottom: 5px;
 }

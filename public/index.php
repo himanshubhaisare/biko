@@ -1,11 +1,5 @@
 <?php
 
-//$_GET['_url'] = '/admin/session/login';
-//$_SERVER['REQUEST_METHOD'] = 'POST';
-
-//$_POST['login'] = 'admin';
-//$_POST['password'] = 'secret';
-
 use Phalcon\Mvc\Application;
 
 if (empty($_GET['_url'])) {

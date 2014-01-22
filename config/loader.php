@@ -9,7 +9,7 @@ $loader->registerNamespaces(array(
 	'Biko\Backend\Controllers'  => __DIR__ . '/../apps/backend/controllers/',
 	'Biko\Backend\Forms'        => __DIR__ . '/../apps/backend/forms/',
 	'Biko\Models'               => __DIR__ . '/../shared/models/',
-	'Biko\Mapper'               => __DIR__ . '/../library/Biko/Mapper/',
+	'Biko'                      => __DIR__ . '/../library/Biko/',
 ));
 
 $loader->register();
