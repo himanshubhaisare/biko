@@ -2,6 +2,8 @@
 
 namespace Biko\Frontend\Controllers;
 
+use Biko\Controllers\ControllerBase;
+
 class IndexController extends ControllerBase
 {
 

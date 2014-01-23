@@ -2,8 +2,9 @@
 
 namespace Biko\Backend\Controllers;
 
-use Biko\Backend\Forms\LoginForm;
 use Biko\Models\Users;
+use Biko\Backend\Forms\LoginForm;
+use Biko\Controllers\ControllerBase;
 
 /**
  * @RoutePrefix("/admin/dashboard")
@@ -17,6 +18,10 @@ class DashboardController extends ControllerBase
     public function indexAction()
     {
     	$this->tag->setTitle('Dashboard');
+
+    	$this->view->setTemplateBefore(array(
+			'menu', 'main'
+		));
     }
 
 }

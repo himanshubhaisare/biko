@@ -70,7 +70,8 @@ $di['assets'] = function() {
     $assets = new AssetsManager();
 
     $assets
-        ->addJs('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js', false);
+        ->addJs('//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js', false)
+        ->addJs('//netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js', false);
 
     $assets
         ->addCss('css/bootstrap.min.css')

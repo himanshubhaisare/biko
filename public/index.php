@@ -26,6 +26,18 @@ require __DIR__ . '/../config/loader.php';
  */
 $application = new Application();
 
+$eventsManager = new Phalcon\Events\Manager();
+
+$application->setEventsManager($eventsManager);
+
+$eventsManager->attach('application:viewRender', function($event, $application) {
+	$dispatcher = $application->getDI()->getDispatcher();
+	$controllerName = strtolower($dispatcher->getControllerName());
+	if (substr($controllerName, 0, 1) == '\\') {
+		$dispatcher->setControllerName(substr($controllerName, 1));
+	}
+});
+
 /**
  * Assign the DI
  */

@@ -21,6 +21,11 @@ class Products extends ModelBase
 	public $categoriesId;
 
 	/**
+	 * @Column(type="string", nullable=false, column="pro_icon")
+	 */
+	public $icon;
+
+	/**
 	 * @Column(type="string", nullable=false, column="pro_name")
 	 */
 	public $name;

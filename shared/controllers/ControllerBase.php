@@ -1,6 +1,6 @@
 <?php
 
-namespace Biko\Frontend\Controllers;
+namespace Biko\Controllers;
 
 use Phalcon\Mvc\Controller;
 

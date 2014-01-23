@@ -3,6 +3,7 @@
 namespace Biko\Frontend\Controllers;
 
 use Biko\Models\Categories;
+use Biko\Controllers\ControllerBase;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 
 class CatalogsController extends ControllerBase
@@ -27,6 +28,8 @@ class CatalogsController extends ControllerBase
 
 		$this->view->category = $category;
         $this->view->page = $paginator->getPaginate();
+
+        $this->tag->setTitle($category->name);
     }
 
 }
