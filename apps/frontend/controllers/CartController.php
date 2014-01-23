@@ -13,65 +13,97 @@ use Biko\Controllers\ControllerBase;
 class CartController extends ControllerBase
 {
 
-    /**
-     * @Route("/cart/add/{product-id:[0-9]+}", name="add-cart", methods={"POST", "GET"})
-     */
-    public function addAction($productId=null)
-    {
+	/**
+	 * @Route("/cart/add/{product-id:[0-9]+}", name="add-cart", methods={"POST", "GET"})
+	 */
+	public function addAction($productId=null)
+	{
 
-        /* Check if the product does exist */
-        $product = Products::findFirstById($productId);
-        if (!$product) {
-            $this->flash->error('Product could not be found');
-            return $this->dispatcher->forward(array(
-                'controller' => 'catalogs',
-                'action'     => 'category',
-                'params'     => array('software')
-            ));
-        }
+		/* Check if the product does exist */
+		$product = Products::findFirstById($productId);
+		if (!$product) {
+			$this->flash->error('Product could not be found');
+			return $this->dispatcher->forward(array(
+				'controller' => 'catalogs',
+				'action'     => 'category',
+				'params'     => array('software')
+			));
+		}
 
-        /* Check if the product does exist */
-        if (!$product->stock) {
-            $this->flash->error('Product cannot be sold because it doesn\'t have stock available');
-            return $this->dispatcher->forward(array(
-                'controller' => 'catalogs',
-                'action'     => 'category',
-                'params'     => array('software')
-            ));
-        }
+		/* Check if the product does exist */
+		if (!$product->stock) {
+			$this->flash->error('Product cannot be sold because it doesn\'t have stock available');
+			return $this->dispatcher->forward(array(
+				'controller' => 'catalogs',
+				'action'     => 'category',
+				'params'     => array('software')
+			));
+		}
 
-        if ($this->request->isPost()) {
+		$uniqueId = $this->unique->get();
 
-            if (!$this->session->has('sessionId')) {
-                $sessionId = md5(uniqid("sess", true));
-                $this->session->set('sessionId', $sessionId);
-            } else {
-                $sessionId = $this->session->get('sessionId');
-            }
+		/** Add/Update shopping cart */
+		$cart = Cart::findFirst(array(
+			array(
+				'sessionId'  => $uniqueId,
+				'productsId' => $product->id
+			)
+		));
 
-            /** Add/Update shopping cart */
-            $cart = Cart::findFirst(array(
-                array(
-                    'sessionId'  => $sessionId,
-                    'productsId' => $product->id
-                )
-            ));
-            if (!$cart) {
-                $cart = new Cart();
-                $cart->sessionId  = $sessionId;
-                $cart->productsId = $product->id;
-                $cart->quantity   = 1;
-            } else {
-                $cart->quantity++;
-            }
+		$this->view->cart    = $cart;
+		$this->view->product = $product;
 
-            $cart->save();
+		if ($this->request->isPost()) {
 
-        }
+			$quantity = $this->request->getPost('quantity', 'int', 0);
+			if ($quantity <= 0) {
+				$this->flash->error('Quantity must be greater than zero');
+				return;
+			}
 
-        $this->view->product = $product;
-    }
+			if (!$cart) {
+				$cart = new Cart();
+				$cart->sessionId  = $uniqueId;
+				$cart->productsId = $product->id;
+				$cart->quantity   = $quantity;
+			} else {
+				$cart->quantity += $quantity;
+			}
 
+			if ($cart->quantity >= $product->stock) {
+				$this->flash->error('We don\'t have enought units to supply the amount you are requesting');
+				return;
+			}
+
+			if ($cart->save()) {
+
+				$quantityTotal = 0;
+				$items = Cart::find(array(
+					array('sessionId'  => $uniqueId)
+				));
+				foreach ($items as $item) {
+					$quantityTotal += $item->quantity;
+				}
+
+				/** Update how many items are in the cart */
+				$this->session->set('cartItems', $quantityTotal);
+
+				if ($quantity > 1) {
+					$this->flash->success($quantity . ' copies of "' . $product->name . '" were added to your shopping cart');
+				} else {
+					$this->flash->success('One copy of "' . $product->name . '" was added to your shopping cart');
+				}
+
+				return $this->dispatcher->forward(array(
+					'controller' => 'catalogs',
+					'action'     => 'category',
+					'params'     => array('software')
+				));
+			}
+
+		}
+
+	}
 
 }
 

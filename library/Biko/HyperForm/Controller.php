@@ -2,15 +2,15 @@
 
 namespace Biko\HyperForm;
 
-use Phalcon\Mvc\Model\Criteria,
-	Phalcon\Forms\Element\Select,
-	Phalcon\Paginator\Adapter\Model as Paginator,
-	Phalcon\Validation\Validator\PresenceOf;
+use Phalcon\Mvc\Model\Criteria;
+use Phalcon\Forms\Element\Select;
+use Phalcon\Paginator\Adapter\Model as Paginator;
+use Phalcon\Validation\Validator\PresenceOf;
 
-use Biko\Controllers\ControllerBase,
-	Biko\Reports\Report,
+use Biko\Controllers\ControllerBase;
+use Biko\Reports\Report;
 
-	Biko\Audit\Audit;
+use Biko\Audit\Audit;
 
 /**
  * Base Controller for HyperForm-based controllers

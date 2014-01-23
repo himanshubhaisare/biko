@@ -39,10 +39,13 @@
 	</div>
 	<div class="navbar-collapse collapse navbar-responsive-collapse">
 		<ul class="nav navbar-nav pull-right">
-			<?php if (!$this->session->get('cart')) { ?>
-				You don't have items added to the shopping cart
-			<?php } ?>
-		</ul>
+			<?php $items = $this->session->get('cartItems'); ?><?php if (!$items) { ?>You don't have items added to the shopping cart<?php } else { ?><table>
+					<tr>
+						<td>You have <b><?php echo $items; ?></b> in the shopping cart</td>
+						<td></td>
+						<td><?php echo $this->tag->linkTo(array('cart/checkout', 'Check-Out', 'class' => 'btn btn-success btn-xs')); ?></td>
+					</tr>
+				</table><?php } ?></ul>
 	</div>
 </div>
 

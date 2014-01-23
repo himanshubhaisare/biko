@@ -1,4 +1,6 @@
 
+{{ content() }}
+
 <h2>{{ product.name }}</h2>
 
 <hr>
@@ -19,24 +21,28 @@
 
 		<div class="col-md-5">
 
-			<div class="well" xstyle="max-width: 40%; margin-left: 20px">
-				<div class="form-group">
-					<label for="inputPassword" class="col-lg-2 control-label">Quantity</label>
-					<div class="col-lg-10">
-						<input type="number" class="form-control" id="quantity" value="1" style="text-align: right; width: 240px">
-						<div class="checkbox">
-							<label>
-								<input type="checkbox"> Include one-year warranty (+ $30.00)
-							</label>
+			<form method="post">
+
+				<div class="well">
+					<div class="form-group">
+						<label for="inputPassword" class="col-lg-2 control-label">Quantity</label>
+						<div class="col-lg-10">
+							<input type="number" class="form-control" id="quantity" name="quantity" value="{{ cart ? cart.quantity : 1 }}" style="text-align: right; width: 240px">
+							<div class="checkbox">
+								<label>
+									<input type="checkbox"> Include one-year warranty (+ $30.00)
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-lg-10" align="right">
+							<input type="submit" class="btn btn-success" value="Add to Cart">
 						</div>
 					</div>
 				</div>
-				<div class="form-group">
-					<div class="col-lg-10" align="right">
-						<input type="submit" class="btn btn-success" value="Add to Cart">
-					</div>
-				</div>
-			</div>
+
+			</form>
 
 		</div>
 

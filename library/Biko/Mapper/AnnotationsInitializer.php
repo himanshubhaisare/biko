@@ -2,9 +2,9 @@
 
 namespace Biko\Mapper;
 
-use Phalcon\Events\Event,
-	Phalcon\Mvc\User\Plugin as MvcPlugin,
-	Phalcon\Mvc\Model\Manager as ModelsManager;
+use Phalcon\Events\Event;
+use Phalcon\Mvc\User\Plugin as MvcPlugin;
+use Phalcon\Mvc\Model\Manager as ModelsManager;
 
 class AnnotationsInitializer extends MvcPlugin
 {

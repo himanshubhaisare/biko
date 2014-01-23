@@ -43,9 +43,18 @@
 	</div>
 	<div class="navbar-collapse collapse navbar-responsive-collapse">
 		<ul class="nav navbar-nav pull-right">
-			{% if !session.get("cart") %}
+			{% set items = session.get("cartItems") %}
+			{%- if !items -%}
 				You don't have items added to the shopping cart
-			{% endif %}
+			{%- else -%}
+				<table>
+					<tr>
+						<td>You have <b>{{ items }}</b> in the shopping cart</td>
+						<td></td>
+						<td>{{ link_to('cart/checkout', 'Check-Out', 'class': 'btn btn-success btn-xs') }}</td>
+					</tr>
+				</table>
+			{%- endif -%}
 		</ul>
 	</div>
 </div>

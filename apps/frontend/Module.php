@@ -5,6 +5,7 @@ namespace Biko\Frontend;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Mvc\ModuleDefinitionInterface;
 use Phalcon\Mvc\Collection\Manager as CollectionManager;
+use Biko\Unique\Generator;
 
 class Module implements ModuleDefinitionInterface
 {
@@ -52,9 +53,18 @@ class Module implements ModuleDefinitionInterface
 			return $mongo->selectDb("biko");
 		};
 
-		//Collection manager
+		/**
+		 * ODM Collection Manager
+		 */
 		$di['collectionManager'] = function() {
 			return new CollectionManager();
+		};
+
+		/**
+		 * Unique Cart ID generator
+		 */
+		$di['unique'] = function() {
+			return new Generator();
 		};
 
 	}
