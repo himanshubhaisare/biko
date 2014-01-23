@@ -7,6 +7,7 @@ use Phalcon\Forms\Element\Text;
 use Phalcon\Forms\Element\Select;
 use Phalcon\Forms\Element\TextArea;
 use Phalcon\Forms\Element\Hidden;
+use Phalcon\Forms\Element\Date;
 
 use Phalcon\Validation\Validator\PresenceOf;
 use Biko\Validators\Numericality;
@@ -16,14 +17,16 @@ use Biko\Models\Categories;
 class ProductsForm extends FormBase
 {
 
+	/**
+	 * @param Phalcon\Mvc\ModelInstance $entity
+	 * @param array $options
+	 */
 	public function initialize($entity=null, $options=null)
 	{
 
 		if (!isset($options['edit']) && !isset($options['create'])) {
 			$id = new Text('id');
 			$id->setLabel('Id');
-			$id->setUserOption('searcheable', true);
-			$id->setUserOption('browseable', true);
 			$this->add($id);
 		}
 
@@ -40,6 +43,13 @@ class ProductsForm extends FormBase
 		$category->setUserOption('browseable', true);
 		$category->setUserOption('relation', 'category');
 		$this->add($category);
+
+		$icon = new Text('icon', array('placeholder' => 'Enter a css-icon class name'));
+		$icon->setLabel('Icon');
+		$icon->addValidator(new PresenceOf(array(
+			'message' => 'Icon is mandatory'
+		)));
+		$this->add($icon);
 
 		$code = new Text('code', array('maxlength' => 10));
 		$code->setLabel('Code');
@@ -77,6 +87,26 @@ class ProductsForm extends FormBase
 			'message' => 'Price must be a number'
 		)));
 		$this->add($price);
+
+		$stock = new Text('stock');
+		$stock->setLabel('Stock');
+		$stock->setUserOption('browseable', true);
+		$stock->addValidator(new PresenceOf(array(
+			'message' => 'Current stock is mandatory'
+		)));
+		$stock->addValidator(new Numericality(array(
+			'message' => 'Current stock must be a number'
+		)));
+		$this->add($stock);
+
+		if (isset($options['edit'])) {
+			$createdAt = new Date('created', array('readonly' => 'readonly'));
+			$createdAt->setLabel('Created At');
+			if ($entity->createdAt) {
+				$entity->created = date('Y-m-d', $entity->createdAt);
+			}
+			$this->add($createdAt);
+		}
 	}
 
 }

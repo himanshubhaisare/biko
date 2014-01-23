@@ -137,7 +137,7 @@ class Controller extends ControllerBase
 
 		$records = $model::find($parameters);
 		if (count($records) == 0) {
-			$this->flash->notice("Search didn't return any " . $this->config['singular']);
+			$this->flash->notice("Search didn't return any " . $this->config['single']);
 			return $this->dispatcher->forward(array(
 				"action" => "index"
 			));
@@ -225,10 +225,10 @@ class Controller extends ControllerBase
 
 						/*Audit::create(array(
 							'module' => $this->dispatcher->getControllerName(),
-							'description' => self::$_config['genre'] == 'M' ? 'CREÓ UN ' . \Phalcon\Text::upper(self::$_config['singular']) : 'CREÓ UNA ' . \Phalcon\Text::upper(self::$_config['singular'])
+							'description' => self::$_config['genre'] == 'M' ? 'CREÓ UN ' . \Phalcon\Text::upper(self::$_config['single']) : 'CREÓ UNA ' . \Phalcon\Text::upper(self::$_config['single'])
 						));*/
 
-						$this->flash->success(ucfirst($this->config['singular']) . " was created successfully");
+						$this->flash->success(ucfirst($this->config['single']) . " was created successfully");
 
 						$this->tag->resetInput();
 						$form->clear();
@@ -258,7 +258,7 @@ class Controller extends ControllerBase
 			'bind' => array($primaryKey)
 		));
 		if (!$record) {
-			$this->flash->error("The " . $this->config['singular'] . " cannot be found");
+			$this->flash->error("The " . $this->config['single'] . " cannot be found");
 			return $this->dispatcher->forward(array('action' => 'index'));
 		}
 
@@ -289,14 +289,14 @@ class Controller extends ControllerBase
 						$this->afterUpdate($record);
 					}
 
-					/*$message = self::$_config['genre'] == 'M' ? 'ACTUALIZÓ EL ' . \Phalcon\Text::upper(self::$_config['singular']) : 'ACTUALIZÓ LA ' . \Phalcon\Text::upper(self::$_config['singular']);
+					/*$message = self::$_config['genre'] == 'M' ? 'ACTUALIZÓ EL ' . \Phalcon\Text::upper(self::$_config['single']) : 'ACTUALIZÓ LA ' . \Phalcon\Text::upper(self::$_config['single']);
 
 					Audit::create(array(
 						'module'      => $this->dispatcher->getControllerName(),
 						'description' => $message
 					));*/
 
-					$this->flash->success(ucfirst($this->config['singular']) . " was updated successfully");
+					$this->flash->success(ucfirst($this->config['single']) . " was updated successfully");
 
 					$this->tag->resetInput();
 				}
@@ -322,7 +322,7 @@ class Controller extends ControllerBase
 		$model = $this->config['model'];
 		$record = $model::findFirst(array($primaryKey . " = ?0", 'bind' => array($pk)));
 		if (!$record) {
-			$this->flash->error(ucfirst($this->config['singular']) . " was not found");
+			$this->flash->error(ucfirst($this->config['single']) . " was not found");
 			return $this->dispatcher->forward(array('action' => 'index'));
 		}
 
@@ -344,32 +344,25 @@ class Controller extends ControllerBase
 	/**
 	 * Deletes a record
 	 *
-	 * @param int $pk
+	 * @Route("/delete/{primary-key:[0-9]+}", "name"="hyperform-delete", "methods"="GET")
 	 */
 	public function deleteAction($pk)
 	{
 
-		$primaryKey = self::$_config['primaryKey'];
+		$primaryKey = $this->config['primaryKey'];
 
-		$model = self::$_config['model'];
+		$model = $this->config['model'];
+
 		$record = $model::findFirst(array($primaryKey . " = ?0", 'bind' => array($pk)));
 		if (!$record) {
-			if (self::$_config['genre'] == 'M') {
-				$this->flash->error("El " . self::$_config['singular'] . " no fue encontrado");
-			} else {
-				$this->flash->error("La " . self::$_config['singular'] . " no fue encontrada");
-			}
+			$this->flash->error(ucfirst($this->config['single']) . " was not found");
 			return $this->dispatcher->forward(array('action' => 'index'));
 		}
 
 		if (!$record->delete()) {
 			$this->flash->error($record->getMessages());
 		} else {
-			if (self::$_config['genre'] == 'M') {
-				$this->flash->success("El " . self::$_config['singular'] . " fue eliminado correctamente");
-			} else {
-				$this->flash->success("La " . self::$_config['singular'] . " fue eliminada correctamente");
-			}
+			$this->flash->success(ucfirst($this->config['single']) . " was successfully deleted");
 		}
 
 		return $this->dispatcher->forward(array('action' => 'index'));

@@ -6,6 +6,7 @@ namespace Biko\Models;
  * @Source("biko_products")
  * @BelongsTo("categoriesId", "Biko\Models\Categories", "id", {"alias": "category"})
  * @Behavior("Biko\Behaviors\Rcs")
+ * @Behavior("Biko\Behaviors\Timestampable", {"field": "createdAt"})
  */
 class Products extends ModelBase
 {
@@ -41,6 +42,11 @@ class Products extends ModelBase
 	 * @Column(type="string", nullable=false, column="pro_description")
 	 */
 	public $description;
+
+	/**
+	 * @Column(type="decimal", nullable=false, column="pro_stock")
+	 */
+	public $stock;
 
 	/**
 	 * @Column(type="decimal", nullable=false, column="pro_price")

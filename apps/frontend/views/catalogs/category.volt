@@ -27,7 +27,7 @@
 	</div>
 </div>
 
-{% for product in page.items %}
+{%- for product in page.items -%}
 	<div class="row product">
 		<div class="col-md-1" align="center">
 			<span class="product-icon glyphicon {{ product.icon }}"></span>
@@ -35,6 +35,11 @@
 		<div class="col-md-9">
 			<b class="product-title">{{ product.name }}</b>
 			<p>{{ product.description }}</p>
+			{%- if product.stock < 5 -%}
+				{%- if product.stock > 0 -%}
+					<span class="low-stock">Less than 5 units left</span>
+				{%- endif -%}
+			{%- endif -%}
 		</div>
 		<div class="col-md-2" align="center">
 			<p>
@@ -44,10 +49,14 @@
 					<b class="product-price">Free</b>
 				{%- endif -%}
 			</p>
-			{{ link_to('cart/add', 'Add to Cart', 'class': 'btn btn-default btn-xs') }}
+			{%- if product.stock > 0 -%}
+				{{ link_to('cart/add', 'Add to Cart', 'class': 'btn btn-default btn-xs') }}
+			{%- else -%}
+				<span class="out-of-stock">Out of stock</span>
+			{%- endif -%}
 		</div>
 	</div>
-{% endfor %}
+{%- endfor -%}
 
 <div align="center">
 	<ul class="pagination">

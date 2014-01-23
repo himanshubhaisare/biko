@@ -7,6 +7,7 @@ use Biko\HyperForm\Controller;
 /**
  * CRUD to manage categories
  *
+ * @Private
  * @RoutePrefix("/admin/categories")
  */
 class CategoriesController extends Controller
@@ -19,7 +20,7 @@ class CategoriesController extends Controller
 		$this->config = array(
 			'controller'    => 'admin/categories',
 			'plural'        => 'categories',
-			'singular'      => 'category',
+			'single'        => 'category',
 			'primaryKey'    => 'id',
 			'form'          => 'Biko\Backend\Forms\CategoriesForm',
 			'model'         => 'Biko\Models\Categories'

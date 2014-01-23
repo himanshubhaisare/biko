@@ -20,7 +20,7 @@ class ProductsController extends Controller
 		$this->config = array(
 			'controller'    => 'admin/products',
 			'plural'        => 'products',
-			'singular'      => 'product',
+			'single'        => 'product',
 			'primaryKey'    => 'id',
 			'form'          => 'Biko\Backend\Forms\ProductsForm',
 			'model'         => 'Biko\Models\Products'

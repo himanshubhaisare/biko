@@ -53,7 +53,6 @@ class FormBase extends Form
 			echo $element->render(array('class' => 'form-control'));
 
 			if ($this->hasMessagesFor($element->getName())) {
-				echo '<br/>';
 				foreach ($this->getMessagesFor($element->getName()) as $message) {
 					echo '<span class="help-inline">', $message, '</span><br/>';
 				}

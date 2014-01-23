@@ -128,3 +128,10 @@ footer a {
 .navbar-backend {
 	margin-bottom: 10px;
 }
+
+.out-of-stock {
+	font-size: 13px;
+	color: #c0c0c0;
+	background: #333333;
+	padding: 4px;
+}

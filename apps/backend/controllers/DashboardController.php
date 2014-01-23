@@ -7,6 +7,7 @@ use Biko\Backend\Forms\LoginForm;
 use Biko\Controllers\ControllerBase;
 
 /**
+ * @Private
  * @RoutePrefix("/admin/dashboard")
  */
 class DashboardController extends ControllerBase

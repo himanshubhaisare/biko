@@ -71,7 +71,11 @@ class AnnotationsInitializer extends MvcPlugin
 					case 'Behavior':
 						$arguments = $annotation->getArguments();
 						$behaviorName = $arguments[0];
-						$manager->addBehavior($model, new $behaviorName);
+						if (isset($arguments[1])) {
+							$manager->addBehavior($model, new $behaviorName($arguments[1]));
+						} else {
+							$manager->addBehavior($model, new $behaviorName);
+						}
 						break;
 
 				}

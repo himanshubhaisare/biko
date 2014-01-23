@@ -46,7 +46,7 @@ class Builder extends Component
 		echo '<div class="pull-right">';
 		echo $this->tag->linkTo(array(
 			array('for' => 'hyperform-create'),
-			"<span class='glyphicon glyphicon-plus'></span> Add " . $this->config['singular'],
+			"<span class='glyphicon glyphicon-plus'></span> Add " . $this->config['single'],
 			"class" => "btn btn-primary btn-sm"
 		));
 		echo '</div>';
@@ -126,7 +126,7 @@ class Builder extends Component
 			echo '<div class="col-md-6" align="right">';
 				echo $this->tag->linkTo(array(
 					array('for' => 'hyperform-create'),
-					"<i class='glyphicon glyphicon-plus'></i> Add " . $this->config['singular'],
+					"<i class='glyphicon glyphicon-plus'></i> Add " . $this->config['single'],
 					"class" => "btn btn-primary btn-sm"
 				));
 			echo '</div>';
@@ -242,11 +242,11 @@ class Builder extends Component
 				<h4 class="modal-title">Permanent Removal</h4>
 			  </div>
 			  <div class="modal-body">
-				<p>Are you sure want to delete this ' . $this->config['singular'] . '?</p>
+				<p>Are you sure want to delete this ' . $this->config['single'] . '?</p>
 			  </div>
 			  <div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">Forget it</button>
-				<button type="button" class="btn btn-danger" onclick="window.location = \'' . $this->url->get($this->config['controller'] . "/delete/") . '\' + window.tempId">Save changes</button>
+				<button type="button" class="btn btn-danger" onclick="window.location = \'' . $this->url->get($this->config['controller'] . "/delete/") . '\' + window.tempId">Delete</button>
 			  </div>
 			</div><!-- /.modal-content -->
 		  </div><!-- /.modal-dialog -->
@@ -280,7 +280,7 @@ class Builder extends Component
 
 		echo '<div class="well">';
 
-		echo '<fieldset><legend>Add ' . $this->config['singular'] . '</legend>';
+		echo '<fieldset><legend>Add ' . $this->config['single'] . '</legend>';
 
 		$this->form->show();
 
@@ -311,7 +311,7 @@ class Builder extends Component
 
 		echo '<div class="well">';
 
-		echo '<fieldset><legend>Edit ' . $this->config['singular'] . '</legend>';
+		echo '<fieldset><legend>Edit ' . $this->config['single'] . '</legend>';
 
 		$this->form->show();
 

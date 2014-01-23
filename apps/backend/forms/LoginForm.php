@@ -45,9 +45,8 @@ class LoginForm extends Form
 			$html .= '<div class="controls">' . $element->render(array('form-control'));
 
 			if ($this->hasMessagesFor($element->getName())) {
-				$html .= '<br>';
 				foreach ($this->getMessagesFor($element->getName()) as $message) {
-					$html .= '<span class="help-inline">' . $message . '</span>';
+					$html .= '<br><span class="help-inline">' . $message . '</span>';
 				}
 			}
 
