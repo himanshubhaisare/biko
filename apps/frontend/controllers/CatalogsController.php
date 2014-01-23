@@ -19,7 +19,7 @@ class CatalogsController extends ControllerBase
     {
         $category = Categories::findFirstByShortName($shortName);
         if (!$category) {
-        	return $this->dispatcher->forward(array('controller' => 'index'));
+        	return $this->dispatcher->forward(array('controller' => 'index', 'action' => 'index'));
         }
 
         switch ($this->request->getQuery("order")) {

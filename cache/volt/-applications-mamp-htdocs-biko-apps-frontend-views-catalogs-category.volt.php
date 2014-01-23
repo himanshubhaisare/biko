@@ -1,6 +1,8 @@
 
 <?php $currentOrder = $this->request->getQuery('order', 'alphanum'); ?>
 
+<?php echo $this->getContent(); ?>
+
 <div class="row">
 	<div class="col-md-6">
 		<h2><?php echo $category->name; ?></h2>
@@ -26,7 +28,7 @@
 			<b class="product-title"><?php echo $product->name; ?></b>
 			<p><?php echo $product->description; ?></p><?php if ($product->stock < 5) { ?><?php if ($product->stock > 0) { ?><span class="low-stock">Less than 5 units left</span><?php } ?><?php } ?></div>
 		<div class="col-md-2" align="center">
-			<p><?php if ($product->price > 0) { ?><b class="product-price">$<?php echo $product->price; ?></b><?php } else { ?><b class="product-price">Free</b><?php } ?></p><?php if ($product->stock > 0) { ?><?php echo $this->tag->linkTo(array('cart/add', 'Add to Cart', 'class' => 'btn btn-default btn-xs')); ?><?php } else { ?><span class="out-of-stock">Out of stock</span><?php } ?></div>
+			<p><?php if ($product->price > 0) { ?><b class="product-price">$<?php echo $product->price; ?></b><?php } else { ?><b class="product-price">Free</b><?php } ?></p><?php if ($product->stock > 0) { ?><?php echo $this->tag->linkTo(array('cart/add/' . $product->id, 'Add to Cart', 'class' => 'btn btn-default btn-xs')); ?><?php } else { ?><span class="out-of-stock">Out of stock</span><?php } ?></div>
 	</div><?php } ?><div align="center">
 	<ul class="pagination">
 		<li><?php echo $this->tag->linkTo(array('category/' . $category->shortName . '?page=' . $page->before . '&order=' . $currentOrder, '« Previous', 'class' => 'btn btn-default')); ?></li>

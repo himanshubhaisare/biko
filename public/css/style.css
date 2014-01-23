@@ -135,3 +135,10 @@ footer a {
 	background: #333333;
 	padding: 4px;
 }
+
+.low-stock {
+	background: #f95e59;
+	color: #fff;
+	padding: 4px;
+	font-size: 13px;
+}

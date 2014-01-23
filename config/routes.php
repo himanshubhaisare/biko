@@ -11,6 +11,7 @@ $router->notFound(array("controller" => "index", "action" => "route404"));
 $router->addModuleResource('frontend', 'Biko\Frontend\Controllers\Index',    '/index');
 $router->addModuleResource('frontend', 'Biko\Frontend\Controllers\Catalogs', '/category');
 $router->addModuleResource('frontend', 'Biko\Frontend\Controllers\Help',     '/help');
+$router->addModuleResource('frontend', 'Biko\Frontend\Controllers\Cart',     '/cart');
 
 //Register "backend" resources
 $router->addModuleResource('backend', 'Biko\Backend\Controllers\Session');

@@ -1,6 +1,8 @@
 
 {% set currentOrder = request.getQuery("order", "alphanum") %}
 
+{{ content() }}
+
 <div class="row">
 	<div class="col-md-6">
 		<h2>{{ category.name }}</h2>
@@ -50,7 +52,7 @@
 				{%- endif -%}
 			</p>
 			{%- if product.stock > 0 -%}
-				{{ link_to('cart/add', 'Add to Cart', 'class': 'btn btn-default btn-xs') }}
+				{{ link_to('cart/add/' ~ product.id , 'Add to Cart', 'class': 'btn btn-default btn-xs') }}
 			{%- else -%}
 				<span class="out-of-stock">Out of stock</span>
 			{%- endif -%}

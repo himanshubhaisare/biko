@@ -4,6 +4,7 @@ namespace Biko\Frontend;
 
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Mvc\ModuleDefinitionInterface;
+use Phalcon\Mvc\Collection\Manager as CollectionManager;
 
 class Module implements ModuleDefinitionInterface
 {
@@ -47,7 +48,7 @@ class Module implements ModuleDefinitionInterface
 		 * The mongo connection is created
 		 */
 		$di['mongo'] = function() {
-			$mongo = new Mongo();
+			$mongo = new \Mongo();
 			return $mongo->selectDb("biko");
 		};
 
