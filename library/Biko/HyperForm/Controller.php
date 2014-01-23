@@ -9,8 +9,6 @@ use Phalcon\Mvc\Model\Criteria,
 
 use Biko\Controllers\ControllerBase,
 	Biko\Reports\Report,
-	Biko\Models\Revisions,
-	Biko\Models\Records,
 
 	Biko\Audit\Audit;
 
@@ -24,6 +22,10 @@ class Controller extends ControllerBase
 	protected $form;
 
 	protected $page;
+
+	protected $record;
+
+	protected $revisions;
 
 	protected $skipOperation = false;
 
@@ -308,6 +310,72 @@ class Controller extends ControllerBase
 	}
 
 	/**
+	 * Allows to see records' revisions
+	 *
+	 * @Route("/rcs/{primary-key:[0-9]+}", "name"="hyperform-rcs", "methods"="GET")
+	 */
+	public function rcsAction($pk)
+	{
+
+		$primaryKey = $this->config['primaryKey'];
+
+		$model = $this->config['model'];
+		$record = $model::findFirst(array($primaryKey . " = ?0", 'bind' => array($pk)));
+		if (!$record) {
+			$this->flash->error(ucfirst($this->config['singular']) . " was not found");
+			return $this->dispatcher->forward(array('action' => 'index'));
+		}
+
+		$this->revisions = $this->modelsManager->createBuilder()
+			->columns('DISTINCT rv.id AS id')
+			->from(array('re' => 'Biko\Models\Records'))
+			->join('Biko\Models\Revisions', 'rv.id = re.revisionsId', 'rv')
+			->where('rv.source = :source:', array('source' => $record->getSource()))
+			->andWhere('re.fieldName = :fieldName: AND re.value = :value:', array('fieldName' => 'pro_id', 'value' => $pk))
+			->orderBy('rv.createdAt DESC')
+			->getQuery()
+			->execute();
+
+		$formClass = $this->config['form'];
+		$this->form = new $formClass(null);
+		$this->record = $record;
+	}
+
+	/**
+	 * Deletes a record
+	 *
+	 * @param int $pk
+	 */
+	public function deleteAction($pk)
+	{
+
+		$primaryKey = self::$_config['primaryKey'];
+
+		$model = self::$_config['model'];
+		$record = $model::findFirst(array($primaryKey . " = ?0", 'bind' => array($pk)));
+		if (!$record) {
+			if (self::$_config['genre'] == 'M') {
+				$this->flash->error("El " . self::$_config['singular'] . " no fue encontrado");
+			} else {
+				$this->flash->error("La " . self::$_config['singular'] . " no fue encontrada");
+			}
+			return $this->dispatcher->forward(array('action' => 'index'));
+		}
+
+		if (!$record->delete()) {
+			$this->flash->error($record->getMessages());
+		} else {
+			if (self::$_config['genre'] == 'M') {
+				$this->flash->success("El " . self::$_config['singular'] . " fue eliminado correctamente");
+			} else {
+				$this->flash->success("La " . self::$_config['singular'] . " fue eliminada correctamente");
+			}
+		}
+
+		return $this->dispatcher->forward(array('action' => 'index'));
+	}
+
+	/**
 	 * Creates a User
 	 *
 	 */
@@ -525,89 +593,6 @@ class Controller extends ControllerBase
 
 	}
 
-	/**
-	 * Deletes a User
-	 *
-	 * @param int $pk
-	 */
-	public function rcsAction($pk)
-	{
-
-		$primaryKey = self::$_config['primaryKey'];
-
-		$model = self::$_config['model'];
-		$record = $model::findFirst(array($primaryKey . " = ?0", 'bind' => array($pk)));
-		if (!$record) {
-			if (self::$_config['genre'] == 'M') {
-				$this->flash->error("El " . self::$_config['singular'] . " no fue encontrado");
-			} else {
-				$this->flash->error("La " . self::$_config['singular'] . " no fue encontrada");
-			}
-			return $this->dispatcher->forward(array('action' => 'index'));
-		}
-
-		$this->revisions = $this->modelsManager->createBuilder()
-			->columns('DISTINCT rv.id AS id')
-			->from(array('re' => 'Invoicing\Models\Records'))
-			->join('Invoicing\Models\Revisions', 'rv.id = re.revisionsId', 'rv')
-			->where('rv.source = :source:', array('source' => $record->getSource()))
-			->andWhere('re.fieldName = :fieldName: AND re.value = :value:', array('fieldName' => $primaryKey, 'value' => $pk))
-			->orderBy('rv.createdAt DESC')
-			->getQuery()
-			->execute();
-
-		$formClass = self::$_config['form'];
-		$this->form = new $formClass(null);
-		$this->record = $record;
-	}
-
-	/**
-	 * Deletes a record
-	 *
-	 * @param int $pk
-	 */
-	public function deleteAction($pk)
-	{
-
-		$primaryKey = self::$_config['primaryKey'];
-
-		$model = self::$_config['model'];
-		$record = $model::findFirst(array($primaryKey . " = ?0", 'bind' => array($pk)));
-		if (!$record) {
-			if (self::$_config['genre'] == 'M') {
-				$this->flash->error("El " . self::$_config['singular'] . " no fue encontrado");
-			} else {
-				$this->flash->error("La " . self::$_config['singular'] . " no fue encontrada");
-			}
-			return $this->dispatcher->forward(array('action' => 'index'));
-		}
-
-		$identity = $this->session->get('identity');
-		if (!isset($identity['emitterId'])) {
-			$this->flash->error("El emisor no coincide");
-			return $this->dispatcher->forward(array('action' => 'index'));
-		}
-
-		if (isset($record->emittersId)) {
-			if ($record->emittersId != $identity['emitterId']) {
-				$this->flash->error("El emisor no coincide");
-				return $this->dispatcher->forward(array('action' => 'index'));
-			}
-		}
-
-		if (!$record->delete()) {
-			$this->flash->error($record->getMessages());
-		} else {
-			if (self::$_config['genre'] == 'M') {
-				$this->flash->success("El " . self::$_config['singular'] . " fue eliminado correctamente");
-			} else {
-				$this->flash->success("La " . self::$_config['singular'] . " fue eliminada correctamente");
-			}
-		}
-
-		return $this->dispatcher->forward(array('action' => 'index'));
-	}
-
 	public function downloadAction()
 	{
 		/** PHPExcel */
@@ -642,7 +627,7 @@ class Controller extends ControllerBase
 	public function afterExecuteRoute()
 	{
 		if (!isset($this->view->builder)) {
-			$this->view->builder = new Builder($this->form, $this->config, $this->page);
+			$this->view->builder = new Builder($this->form, $this->config, $this->page, $this->record, $this->revisions);
 		}
 	}
 

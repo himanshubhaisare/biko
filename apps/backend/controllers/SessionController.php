@@ -36,11 +36,25 @@ class SessionController extends ControllerBase
                     return $this->flash->error('Incorrect User/Password');
                 }
 
+                $this->session->set('identity', array(
+                    'id' => $user->id
+                ));
+
                 return $this->dispatcher->forward(array('controller' => 'dashboard'));
             }
 
         }
 
+    }
+
+    /**
+     * @Get("/logout", name="session-do-logout")
+     */
+    public function logoutAction()
+    {
+        $this->flash->notice('Good bye!');
+        $this->session->remove('identity');
+        return $this->dispatcher->forward(array('action' => 'index'));
     }
 
 }

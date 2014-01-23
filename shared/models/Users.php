@@ -25,4 +25,9 @@ class Users extends ModelBase
 	 */
 	public $password;
 
+	/**
+	 * @Column(type="string", nullable=false, column="usr_name")
+	 */
+	public $name;
+
 }

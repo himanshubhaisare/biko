@@ -4,6 +4,8 @@ namespace Biko\Models;
 
 /**
  * @Source("biko_products")
+ * @BelongsTo("categoriesId", "Biko\Models\Categories", "id", {"alias": "category"})
+ * @Behavior("Biko\Behaviors\Rcs")
  */
 class Products extends ModelBase
 {

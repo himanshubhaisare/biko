@@ -11,6 +11,7 @@
 	<div class="navbar-collapse collapse navbar-responsive-collapse">
 		<ul class="nav navbar-nav navbar-right">
 			<li>{{ link_to('help', 'Help') }}</li>
+			<li>{{ link_to('admin/session/logout', 'Logout') }}</li>
 		</ul>
 	</div>
 </div>

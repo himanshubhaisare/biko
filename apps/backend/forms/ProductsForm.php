@@ -2,13 +2,16 @@
 
 namespace Biko\Backend\Forms;
 
-use Phalcon\Forms\Form,
-	Phalcon\Forms\Element\Text,
-	Phalcon\Forms\Element\TextArea,
-	Phalcon\Forms\Element\Hidden,
+use Phalcon\Forms\Form;
+use Phalcon\Forms\Element\Text;
+use Phalcon\Forms\Element\Select;
+use Phalcon\Forms\Element\TextArea;
+use Phalcon\Forms\Element\Hidden;
 
-	Phalcon\Validation\Validator\PresenceOf,
-	Biko\Validators\Numericality;
+use Phalcon\Validation\Validator\PresenceOf;
+use Biko\Validators\Numericality;
+
+use Biko\Models\Categories;
 
 class ProductsForm extends FormBase
 {
@@ -23,6 +26,20 @@ class ProductsForm extends FormBase
 			$id->setUserOption('browseable', true);
 			$this->add($id);
 		}
+
+		$category = new Select('categoriesId', Categories::find(), array(
+			'using'     => array('id', 'name'),
+			'useEmpty'  => true,
+			'emptyText' => '...'
+		));
+		$category->setLabel('Category');
+		$category->addValidator(new PresenceOf(array(
+			'message' => 'Category is mandatory'
+		)));
+		$category->setUserOption('searcheable', true);
+		$category->setUserOption('browseable', true);
+		$category->setUserOption('relation', 'category');
+		$this->add($category);
 
 		$code = new Text('code', array('maxlength' => 10));
 		$code->setLabel('Code');

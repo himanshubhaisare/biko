@@ -3,6 +3,10 @@
 namespace Biko\HyperForm;
 
 use Phalcon\Mvc\User\Component;
+use Phalcon\Forms\Element\Select;
+
+use Biko\Models\Revisions;
+use Biko\Models\Records;
 
 class Builder extends Component
 {
@@ -12,15 +16,21 @@ class Builder extends Component
 
 	private $page;
 
+	private $record;
+
+	private $revisions;
+
 	/**
 	 * @param Phalcon\Forms\Form $form
 	 * @param array $config
 	 */
-	public function __construct($form, $config, $page)
+	public function __construct($form, $config, $page, $record, $revisions)
 	{
-		$this->form   = $form;
-		$this->config = $config;
-		$this->page   = $page;
+		$this->form      = $form;
+		$this->config    = $config;
+		$this->page      = $page;
+		$this->record    = $record;
+		$this->revisions = $revisions;
 	}
 
 	/**
@@ -303,7 +313,7 @@ class Builder extends Component
 
 		$this->form->show();
 
-		echo '</fieldset></form>';
+		echo '</fieldset></form></div>';
 	}
 
 	public static function importForm($di, $form, $config)
@@ -362,9 +372,9 @@ class Builder extends Component
 
 				echo '<tr>
 					<td>', $element->getLabel(), '</td>
-					<td>Lista</td>
-					<td>', $required ? 'SI' : 'NO', '</td>
-					<td>Posibles Valores:' . join(', ', $domain) . '</td>
+					<td>List</td>
+					<td>', $required ? 'YES' : 'NO', '</td>
+					<td>Allowed values:' . join(', ', $domain) . '</td>
 				</tr>';
 			} else {
 
@@ -375,43 +385,45 @@ class Builder extends Component
 
 				echo '<tr>
 					<td>', $element->getLabel(), '</td>
-					<td>Texto</td>
-					<td>', $required ? 'SI' : 'NO', '</td>
-					<td>Tamaño Máximo: ' . $maxlength . '</td>
+					<td>Text</td>
+					<td>', $required ? 'YES' : 'NO', '</td>
+					<td>Maximum Length: ' . $maxlength . '</td>
 				</tr>';
 			}
 		}
 		echo '</table></div>';
 
 		echo '<div align="center" class="well" style="padding-bottom:10px">';
-		echo '<p>Plantilla base para importación en Excel ' . $di['tag']->linkTo(array(self::$_config['controller'] . '/download', "Descargar", "class" => "btn btn-primary btn-small")) . '</p>';
+		echo '<p>Base template for Excel importation ' . $this->tag->linkTo(array(self::$_config['controller'] . '/download', "Descargar", "class" => "btn btn-primary btn-small")) . '</p>';
 		echo '</div>';
 	}
 
-	public static function rcsForm($di, $record, $revisions, $form, $config)
+	public function rcsForm()
 	{
 
-		$metaData = $record->getModelsMetaData();
-		$columnMap = $metaData->getColumnMap($record);
+		$metaData = $this->record->getModelsMetaData();
+		$columnMap = $metaData->getColumnMap($this->record);
 
-		echo $di['view']->getContent();
+		echo $this->view->getContent();
 
 		echo '<ul class="pager toolbar">';
 		echo '<li class="previous pull-left">';
-		echo $di['tag']->linkTo(array($config['controller'], "&larr; Atrás"));
+		echo $this->tag->linkTo(array($this->config['controller'], "&larr; Go Back"));
 		echo '</li>';
 		echo '</ul>';
 
-		$escaper = $di['escaper'];
-		foreach ($revisions as $row) {
+		foreach ($this->revisions as $row) {
 
 			$revision = Revisions::findFirst($row->id);
+			if (!$revision) {
+				continue;
+			}
 
 			echo '<table width="100%">';
 			echo '<tr><td valign="top" width="40%">';
 			echo '<table cellpadding="5">';
-			echo '<tr><td align="right">Usuario</td><td><strong>', $revision->user->name, '</strong></td></tr>';
-			echo '<tr><td align="right">Fecha</td><td><strong>', date('d/m/Y H:i', $revision->createdAt), '</strong></td></tr>';
+			echo '<tr><td align="right">User</td><td><strong>', $revision->user->name, '</strong></td></tr>';
+			echo '<tr><td align="right">Date</td><td><strong>', date('r', $revision->createdAt), '</strong></td></tr>';
 			echo '</table>';
 			echo '</td><td width="60%" valign="top">';
 			echo '<table cellpadding="5" class="rcs table table-bordered table-striped" width="100%">';
@@ -423,23 +435,41 @@ class Builder extends Component
 					$attributeName = $record->fieldName;
 				}
 
-				if ($form->has($attributeName)) {
-					$element = $form->get($attributeName);
+				if ($this->form->has($attributeName)) {
+
+					$element = $this->form->get($attributeName);
+
+					/** Process select element options */
+					if ($element instanceof Select) {
+						if (!isset($options[$element->getName()])) {
+							$elementOptions = array();
+							$using = $element->getAttribute('using');
+							foreach ($element->getOptions() as $option) {
+								if (is_object($option)) {
+									$elementOptions[$option->readAttribute($using[0])] = $option->readAttribute($using[1]);
+								}
+							}
+							$options[$element->getName()] = $elementOptions;
+						}
+					}
 
 					$value = $record->value;
-					if (mb_strlen($value) > 20) {
-						$textValue = mb_substr($value, 0, 20) . '...';
+					if ($element instanceof Select) {
+						if (isset($options[$element->getName()][$value])) {
+							$textValue = $options[$element->getName()][$value];
+						} else {
+							$textValue = $value;
+						}
 					} else {
 						$textValue = $value;
 					}
 
 					if ($record->changed == 'Y') {
-						echo '<tr class="success"><td align="right" width="40%">', $element->getLabel(), '</td><td width="60%" title="', $value, '">', $escaper->escapeHtml($textValue), '</td></tr>';
+						echo '<tr class="success"><td align="right" width="40%">', $element->getLabel(), '</td><td width="60%" title="', $value, '">', $this->escaper->escapeHtml($textValue), '</td></tr>';
 					} else {
-						echo '<tr><td align="right" width="40%">', $element->getLabel(), '</td><td width="60%" title="', $value, '">', $escaper->escapeHtml($textValue), '</td></tr>';
+						echo '<tr><td align="right" width="40%">', $element->getLabel(), '</td><td width="60%" title="', $value, '">', $this->escaper->escapeHtml($textValue), '</td></tr>';
 					}
 				}
-
 			}
 			echo '</table>';
 			echo '</td></tr><tr><br><tr>';

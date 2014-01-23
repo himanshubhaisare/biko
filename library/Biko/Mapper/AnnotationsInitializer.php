@@ -65,6 +65,15 @@ class AnnotationsInitializer extends MvcPlugin
 						}
 						break;
 
+					/**
+					 * Initializes the model's source
+					 */
+					case 'Behavior':
+						$arguments = $annotation->getArguments();
+						$behaviorName = $arguments[0];
+						$manager->addBehavior($model, new $behaviorName);
+						break;
+
 				}
 			}
 		}

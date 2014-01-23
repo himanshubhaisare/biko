@@ -11,6 +11,7 @@ $loader->registerNamespaces(array(
 	'Biko\Models'               => __DIR__ . '/../shared/models/',
 	'Biko\Controllers'          => __DIR__ . '/../shared/controllers/',
 	'Biko\Validators'           => __DIR__ . '/../shared/validators/',
+	'Biko\Behaviors'            => __DIR__ . '/../shared/behaviors/',
 	'Biko'                      => __DIR__ . '/../library/Biko/',
 ));
 
