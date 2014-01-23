@@ -29,6 +29,23 @@
 	</div>
 </div>
 
+<div class="cart-nav navbar">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+	</div>
+	<div class="navbar-collapse collapse navbar-responsive-collapse">
+		<ul class="nav navbar-nav pull-right">
+			<?php if (!$this->session->get('cart')) { ?>
+				You don't have items added to the shopping cart
+			<?php } ?>
+		</ul>
+	</div>
+</div>
+
 <div class="main-container container">
 	<?php echo $this->getContent(); ?>
 </div>

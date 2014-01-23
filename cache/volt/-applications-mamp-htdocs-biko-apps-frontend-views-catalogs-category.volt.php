@@ -1,23 +1,44 @@
-<h2><?php echo $category->name; ?></h2>
 
+<?php $currentOrder = $this->request->getQuery('order', 'alphanum'); ?>
 
-	<?php foreach ($page->items as $product) { ?>
-		<div class="row product">
-			<div class="col-md-1" align="center">
-				<span class="product-icon glyphicon <?php echo $product->icon; ?>"></span>
-			</div>
-			<div class="col-md-8">
-				<b class="product-title"><?php echo $product->name; ?></b>
-				<p><?php echo $product->description; ?></p>
-			</div>
-			<div class="col-md-2" align="center"><?php if ($product->price > 0) { ?><b class="product-price">$<?php echo $product->price; ?></b><?php } else { ?><b class="product-price">Free</b><?php } ?><?php echo $this->tag->linkTo(array('cart/add', 'Add to Cart', 'class' => 'btn btn-info btn-sm')); ?>
-			</div>
+<div class="row">
+	<div class="col-md-6">
+		<h2><?php echo $category->name; ?></h2>
+	</div>
+	<div class="col-md-5" align="right">
+		<div class="btn-group" align="left">
+			<button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
+				<?php if ($currentOrder) { ?>
+					Order By | <?php echo ucwords($currentOrder); ?> <span class="caret"></span>
+				<?php } else { ?>
+					Order By <span class="caret"></span>
+				<?php } ?>
+			</button>
+			<ul class="dropdown-menu"><?php foreach (array('newest', 'name', 'price', 'rating') as $order) { ?><?php if ($order == $currentOrder) { ?>
+						<li class="active"><?php echo $this->tag->linkTo(array('category/' . $category->shortName . '?page=' . $page->current . '&order=' . $order, ucwords($order))); ?></li><?php } else { ?><li><?php echo $this->tag->linkTo(array('category/' . $category->shortName . '?page=' . $page->current . '&order=' . $order, ucwords($order))); ?></li><?php } ?><?php } ?></ul>
 		</div>
-	<?php } ?>
+	</div>
+</div>
+
+<?php foreach ($page->items as $product) { ?>
+	<div class="row product">
+		<div class="col-md-1" align="center">
+			<span class="product-icon glyphicon <?php echo $product->icon; ?>"></span>
+		</div>
+		<div class="col-md-9">
+			<b class="product-title"><?php echo $product->name; ?></b>
+			<p><?php echo $product->description; ?></p>
+		</div>
+		<div class="col-md-2" align="center">
+			<p><?php if ($product->price > 0) { ?><b class="product-price">$<?php echo $product->price; ?></b><?php } else { ?><b class="product-price">Free</b><?php } ?></p>
+			<?php echo $this->tag->linkTo(array('cart/add', 'Add to Cart', 'class' => 'btn btn-default btn-xs')); ?>
+		</div>
+	</div>
+<?php } ?>
 
 <div align="center">
 	<ul class="pagination">
-		<li><?php echo $this->tag->linkTo(array('category/' . $category->shortName . '?page=' . $page->before, '« Previous')); ?></li>
-		<li><?php echo $this->tag->linkTo(array('category/' . $category->shortName . '?page=' . $page->next, 'Next »')); ?></li>
+		<li><?php echo $this->tag->linkTo(array('category/' . $category->shortName . '?page=' . $page->before . '&order=' . $currentOrder, '« Previous', 'class' => 'btn btn-default')); ?></li>
+		<li><?php echo $this->tag->linkTo(array('category/' . $category->shortName . '?page=' . $page->next . '&order=' . $currentOrder, 'Next »', 'class' => 'btn btn-default')); ?></li>
 	</ul>
 </div>

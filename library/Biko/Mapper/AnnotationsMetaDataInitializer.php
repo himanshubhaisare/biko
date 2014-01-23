@@ -24,7 +24,7 @@ class AnnotationsMetaDataInitializer
 
 		$properties = $reflection->getPropertiesAnnotations();
 		if (!$properties) {
-			throw new \Exception("There are no properties with annotations defined on the class");
+			throw new \Exception("There are no properties with annotations defined in the class");
 		}
 
 		$attributes = array();

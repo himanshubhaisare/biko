@@ -145,7 +145,7 @@ class Controller extends ControllerBase
 
 		$reportType = $this->request->getPost('reportType');
 
-		//if ($reportType == 'P' || !$this->request->isPost()) {
+		if ($reportType == 'S' || !$this->request->isPost()) {
 
 			$paginator = new Paginator(array(
 				"data"  => $records,
@@ -156,9 +156,9 @@ class Controller extends ControllerBase
 			$this->page = $paginator->getPaginate();
 			$this->form = $form;
 			return;
-		//}
+		}
 
-		/*try {
+		try {
 			switch ($reportType) {
 				case 'H':
 					$report = new Report('Html', $form, $records);
@@ -186,7 +186,7 @@ class Controller extends ControllerBase
 
 		return $this->dispatcher->forward(array(
 			"action" => "index"
-		));*/
+		));
 	}
 
 	/**
@@ -217,7 +217,7 @@ class Controller extends ControllerBase
 					$record = $this->beforeCreate($record);
 				}
 
-				if (!$this->_skipOperation) {
+				if (!$this->skipOperation) {
 
 					if (!$record->save()) {
 						$this->flash->error($record->getMessages());

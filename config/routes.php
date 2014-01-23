@@ -13,7 +13,7 @@ $router->addModuleResource('frontend', 'Biko\Frontend\Controllers\Catalogs', '/c
 $router->addModuleResource('frontend', 'Biko\Frontend\Controllers\Help',     '/help');
 
 //Register "backend" resources
-$router->addModuleResource('backend', 'Biko\Backend\Controllers\Session',    '/admin/session');
+$router->addModuleResource('backend', 'Biko\Backend\Controllers\Session');
 $router->addModuleResource('backend', 'Biko\Backend\Controllers\Dashboard',  '/admin/dashboard');
 $router->addModuleResource('backend', 'Biko\Backend\Controllers\Products',   '/admin/products');
 $router->addModuleResource('backend', 'Biko\Backend\Controllers\Categories', '/admin/categories');

@@ -7,6 +7,7 @@ use Biko\HyperForm\Controller;
 /**
  * CRUD to manage products
  *
+ * @Private
  * @RoutePrefix("/admin/products")
  */
 class ProductsController extends Controller

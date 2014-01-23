@@ -8,41 +8,54 @@ use Phalcon\Mvc\ModuleDefinitionInterface;
 class Module implements ModuleDefinitionInterface
 {
 
-    /**
-     * Registers the module auto-loader
-     */
-    public function registerAutoloaders()
-    {
+	/**
+	 * Registers the module auto-loader
+	 */
+	public function registerAutoloaders()
+	{
 
-    }
+	}
 
-    /**
-     * Registers the module-only services
-     *
-     * @param Phalcon\DI $di
-     */
-    public function registerServices($di)
-    {
+	/**
+	 * Registers the module-only services
+	 *
+	 * @param Phalcon\DI $di
+	 */
+	public function registerServices($di)
+	{
 
-        /**
-         * Read configuration
-         */
-        $config = include __DIR__ . "/config/config.php";
+		/**
+		 * Read configuration
+		 */
+		$config = include __DIR__ . "/config/config.php";
 
-        $di['view']->setViewsDir(__DIR__ . '/views/');
+		$di['view']->setViewsDir(__DIR__ . '/views/');
 
-        /**
-         * Database connection is created based in the parameters defined in the configuration file
-         */
-        $di['db'] = function () use ($config) {
-            return new DbAdapter(array(
-                "host" => $config->database->host,
-                "username" => $config->database->username,
-                "password" => $config->database->password,
-                "dbname" => $config->database->dbname
-            ));
-        };
+		/**
+		 * The database connection is created based on the parameters defined in the configuration file
+		 */
+		$di['db'] = function () use ($config) {
+			return new DbAdapter(array(
+				"host"     => $config->database->host,
+				"username" => $config->database->username,
+				"password" => $config->database->password,
+				"dbname"   => $config->database->dbname
+			));
+		};
 
-    }
+		/**
+		 * The mongo connection is created
+		 */
+		$di['mongo'] = function() {
+			$mongo = new Mongo();
+			return $mongo->selectDb("biko");
+		};
+
+		//Collection manager
+		$di['collectionManager'] = function() {
+			return new CollectionManager();
+		};
+
+	}
 
 }

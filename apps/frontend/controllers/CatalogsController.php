@@ -6,6 +6,9 @@ use Biko\Models\Categories;
 use Biko\Controllers\ControllerBase;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 
+/**
+ * @Public
+ */
 class CatalogsController extends ControllerBase
 {
 
@@ -19,9 +22,22 @@ class CatalogsController extends ControllerBase
         	return $this->dispatcher->forward(array('controller' => 'index'));
         }
 
-        // Create a Model paginator, show 5 rows by page starting from $currentPage
+        switch ($this->request->getQuery("order")) {
+            case 'newest':
+                $products = $category->products;
+                break;
+            case 'price':
+                $products = $category->getProducts(array('order' => 'price'));
+                break;
+            case 'name':
+                $products = $category->getProducts(array('order' => 'name'));
+                break;
+            default:
+                $products = $category->products;
+        }
+
 		$paginator = new Paginator(array(
-			"data" => $category->products,
+			"data" => $products,
 			"limit"=> 4,
 			"page" => $this->request->getQuery("page", null, 1)
 		));

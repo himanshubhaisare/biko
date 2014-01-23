@@ -47,4 +47,9 @@ class Products extends ModelBase
 	 */
 	public $price;
 
+	/**
+	 * @Column(type="integer", nullable=false, column="pro_created_at")
+	 */
+	public $createdAt;
+
 }
