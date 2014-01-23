@@ -2,8 +2,9 @@
 
 namespace Biko\Backend\Forms;
 
-use Phalcon\Forms\Form,
-	Phalcon\Validation\Validator\PresenceOf;
+use Phalcon\Forms\Form;
+use Phalcon\Forms\Element\Hidden;
+use Phalcon\Validation\Validator\PresenceOf;
 
 class FormBase extends Form
 {
@@ -13,6 +14,10 @@ class FormBase extends Form
 		foreach ($this->getElements() as $element) {
 
 			if ($element->getUserOption('read-only')) {
+				continue;
+			}
+
+			if ($element instanceof Hidden) {
 				continue;
 			}
 

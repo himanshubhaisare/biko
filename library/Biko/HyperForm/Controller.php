@@ -147,7 +147,7 @@ class Controller extends ControllerBase
 
 			$paginator = new Paginator(array(
 				"data"  => $records,
-				"limit" => 10,
+				"limit" => 7,
 				"page"  => $numberPage
 			));
 
@@ -263,61 +263,46 @@ class Controller extends ControllerBase
 		$formClass = $this->config['form'];
 		$form      = new $formClass($record, array('edit' => true));
 
-		/*if ($this->request->isPost()) {
+		if ($this->request->isPost()) {
 
 			$form->bind($this->request->getPost(), $record);
 
+			/* beforeSave callback */
 			if (method_exists($this, 'beforeSave')) {
 				$this->beforeSave($record);
 			}
 
+			/* beforeUpdate callback */
 			if (method_exists($this, 'beforeUpdate')) {
 				$this->beforeUpdate($record);
 			}
-
-			$identity = $this->session->get('identity');
-			if (!isset($identity['emitterId'])) {
-				$this->flash->error("El emisor no coincide");
-				return $this->dispatcher->forward(array('action' => 'index'));
-			}
-
-			if (isset($record->emittersId)) {
-				if ($record->emittersId != $identity['emitterId']) {
-					$this->flash->error("El emisor no coincide");
-					return $this->dispatcher->forward(array('action' => 'index'));
-				}
-			}
-
-			$record->emittersId = $identity['emitterId'];
 
 			if ($form->isValid()) {
 				if (!$record->save()) {
 					$this->flash->error($record->getMessages());
 				} else {
 
+					/* After update callback */
 					if (method_exists($this, 'afterUpdate')) {
 						$this->afterUpdate($record);
 					}
 
-					$message = self::$_config['genre'] == 'M' ? 'ACTUALIZÓ EL ' . \Phalcon\Text::upper(self::$_config['singular']) : 'ACTUALIZÓ LA ' . \Phalcon\Text::upper(self::$_config['singular']);
+					/*$message = self::$_config['genre'] == 'M' ? 'ACTUALIZÓ EL ' . \Phalcon\Text::upper(self::$_config['singular']) : 'ACTUALIZÓ LA ' . \Phalcon\Text::upper(self::$_config['singular']);
 
 					Audit::create(array(
 						'module'      => $this->dispatcher->getControllerName(),
 						'description' => $message
-					));
+					));*/
 
-					if (self::$_config['genre'] == 'M') {
-						$this->flash->success("El " . self::$_config['singular'] . " fue actualizado correctamente");
-					} else {
-						$this->flash->success("La " . self::$_config['singular'] . " fue actualizada correctamente");
-					}
+					$this->flash->success(ucfirst($this->config['singular']) . " was updated successfully");
+
 					$this->tag->resetInput();
 				}
 			} else {
-				$this->flash->error('Parece que algunos datos no son correctos. Por favor verifica a continuación e intenta de nuevo');
+				$this->flash->error('It seems there are some problems saving the data. Please check below');
 			}
 
-		}*/
+		}
 
 		$this->form = $form;
 	}

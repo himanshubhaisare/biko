@@ -200,27 +200,27 @@ class Builder extends Component
 		}
 		echo '</tbody>';
 
-		/*echo '<tbody>
+		echo '<tbody>
 			<tr>
 				<td colspan="', ($number + 3), '" align="left">
 					<table width="100%" class="paginator">
 						<tr>
 							<td align="left" width="50%">
 								<div class="btn-group">
-									', $this->tag->linkTo(array($this->config['controller'] . "/search",                       '<i class="icon-fast-backward"></i>', "class" => "btn")) . '
-									', $this->tag->linkTo(array($this->config['controller'] . "/search?page=" . $page->before, '<i class="icon-step-backward"></i>', "class" => "btn")) . '
-									', $this->tag->linkTo(array($this->config['controller'] . "/search?page=" . $page->next,   '<i class="icon-step-forward"></i>', "class" => "btn")) . '
-									', $this->tag->linkTo(array($this->config['controller'] . "/search?page=" . $page->last,   '<i class="icon-fast-forward"></i>', "class" => "btn")) . '
+									', $this->tag->linkTo(array($this->config['controller'] . "/search",                             '<i class="glyphicon glyphicon-fast-backward"></i>', "class" => "btn btn-default btn-sm")) . '
+									', $this->tag->linkTo(array($this->config['controller'] . "/search?page=" . $this->page->before, '<i class="glyphicon glyphicon-step-backward"></i>', "class" => "btn btn-default btn-sm")) . '
+									', $this->tag->linkTo(array($this->config['controller'] . "/search?page=" . $this->page->next,   '<i class="glyphicon glyphicon-step-forward"></i>',  "class" => "btn btn-default btn-sm")) . '
+									', $this->tag->linkTo(array($this->config['controller'] . "/search?page=" . $this->page->last,   '<i class="glyphicon glyphicon-fast-forward"></i>',  "class" => "btn btn-default btn-sm")) . '
 								</div>
 							</td>
 							<td align="right" width="50%">
-								<span class="help-inline">', $page->current, '/', $page->total_pages, ' Total: ', $page->total_items, '</span>
+								<span class="help-inline">', $this->page->current, '/', $this->page->total_pages, ' Total: ', $this->page->total_items, '</span>
 							</td>
 						</tr>
 					</table>
 				</td>
 			</tr>
-		<tbody>*/
+		<tbody>';
 
 		echo '</table>';
 
@@ -283,13 +283,19 @@ class Builder extends Component
 
 		echo '<ul class="pager toolbar">';
 			echo '<li class="previous pull-left">';
-				echo $this->tag->linkTo(array($this->config['controller'] . '/search', "&larr; Go Back"));
+				echo $this->tag->linkTo(array(
+					array('for' => 'hyperform-search'),
+					"&larr; Go Back",
+					"class" => "btn btn-sm btn-default"
+				));
 			echo '</li>';
 			echo '<li class="pull-right">';
-				echo $this->tag->submitButton(array("Actualizar", "class" => "btn btn-sm btn-success"));
+				echo $this->tag->submitButton(array(
+					"Update",
+					"class" => "btn btn-sm btn-success"
+				));
 			echo '</li>';
 		echo '</ul>';
-
 
 		echo '<div class="well">';
 
@@ -326,6 +332,7 @@ class Builder extends Component
 
 		echo '<div align="left">';
 		echo '<p>Por favor importe un archivo de Microsoft Excel de máximo 4000 registros con las siguientes columnas:</p>
+
 		<table class="table table-bordered table-striped table-condensed" align="center"><tr><th>Nombre</th><th>Tipo</th><th>Requerido</th><th>Descripción</th>';
 		foreach ($form->getElements() as $element) {
 
