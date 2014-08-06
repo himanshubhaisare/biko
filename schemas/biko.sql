@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.27, for osx10.7 (i386)
+-- MySQL dump 10.13  Distrib 5.1.72, for apple-darwin10.8.0 (i386)
 --
 -- Host: localhost    Database: biko
 -- ------------------------------------------------------
--- Server version	5.5.27
+-- Server version	5.1.72-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -27,7 +27,7 @@ CREATE TABLE `biko_categories` (
   `cat_short_name` varchar(16) NOT NULL,
   `cat_name` varchar(32) NOT NULL,
   PRIMARY KEY (`cat_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -36,6 +36,7 @@ CREATE TABLE `biko_categories` (
 
 LOCK TABLES `biko_categories` WRITE;
 /*!40000 ALTER TABLE `biko_categories` DISABLE KEYS */;
+INSERT INTO `biko_categories` VALUES (1,'software','Software');
 /*!40000 ALTER TABLE `biko_categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -48,11 +49,16 @@ DROP TABLE IF EXISTS `biko_products`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `biko_products` (
   `pro_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `pro_cat_id` int(10) unsigned NOT NULL,
   `pro_code` varchar(20) NOT NULL,
   `pro_name` varchar(64) NOT NULL,
   `pro_price` decimal(10,2) NOT NULL,
+  `pro_stock` int(11) NOT NULL,
+  `pro_created_at` int(11) NOT NULL,
+  `pro_description` text NOT NULL,
+  `pro_icon` varchar(24) NOT NULL,
   PRIMARY KEY (`pro_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -61,6 +67,7 @@ CREATE TABLE `biko_products` (
 
 LOCK TABLES `biko_products` WRITE;
 /*!40000 ALTER TABLE `biko_products` DISABLE KEYS */;
+INSERT INTO `biko_products` VALUES (1,1,'FIXERPRO','Fixer Pro 3000','100.00',3,2005,'Fix any problem in your software without calling your vendor with this amazing fixer',''),(2,2,'MASTERSW','Master SoftwareDesigner AW','750.00',2,0,'',''),(3,2,'MASTERSW','Master SoftwareDesigner AW','750.00',2,0,'','');
 /*!40000 ALTER TABLE `biko_products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -98,4 +105,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-01-20 10:21:39
+-- Dump completed on 2014-08-06  0:59:55
